@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,6 +14,7 @@ const LogUploader: React.FC<LogUploaderProps> = ({ onLogsLoaded }) => {
   const [fileName, setFileName] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showAdvancedInfo, setShowAdvancedInfo] = useState(false);
+  const [showPipelineSteps, setShowPipelineSteps] = useState(false);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -207,6 +207,53 @@ const LogUploader: React.FC<LogUploaderProps> = ({ onLogsLoaded }) => {
                     <li>Advanced analytics with Hive SQL queries</li>
                     <li>Custom MapReduce jobs for complex aggregations</li>
                   </ul>
+                  
+                  <div className="mt-3">
+                    <Button
+                      variant="link"
+                      size="sm"
+                      className="text-space-accent p-0 h-auto text-xs hover:text-space-highlight"
+                      onClick={() => setShowPipelineSteps(!showPipelineSteps)}
+                    >
+                      {showPipelineSteps ? "Hide pipeline details" : "Show complete pipeline details"}
+                    </Button>
+                  </div>
+                  
+                  {showPipelineSteps && (
+                    <div className="mt-2 border border-space-accent/20 rounded p-3 bg-space-blue/30">
+                      <p className="text-xs font-medium text-space-highlight mb-2">Complete Data Pipeline</p>
+                      
+                      <ol className="list-decimal list-inside text-xs space-y-2 text-muted-foreground">
+                        <li className="pb-2 border-b border-space-accent/10">
+                          <span className="font-medium text-space-accent">Collection</span>
+                          <p className="mt-1 pl-4">Apache Flume captures logs from web servers and delivers them to HDFS in real-time</p>
+                        </li>
+                        
+                        <li className="pb-2 border-b border-space-accent/10">
+                          <span className="font-medium text-space-accent">Storage</span>
+                          <p className="mt-1 pl-4">Hadoop Distributed File System (HDFS) provides redundant, scalable storage for petabytes of log data</p>
+                        </li>
+                        
+                        <li className="pb-2 border-b border-space-accent/10">
+                          <span className="font-medium text-space-accent">Processing</span>
+                          <p className="mt-1 pl-4">MapReduce jobs transform raw logs into structured data, extracting timestamps, status codes, IPs, and request details</p>
+                        </li>
+                        
+                        <li className="pb-2 border-b border-space-accent/10">
+                          <span className="font-medium text-space-accent">Analysis</span>
+                          <p className="mt-1 pl-4">Apache Hive provides SQL-like querying capabilities for analyzing patterns, identifying anomalies, and generating reports</p>
+                        </li>
+                        
+                        <li>
+                          <span className="font-medium text-space-accent">Visualization</span>
+                          <p className="mt-1 pl-4">Processed data can be exported to BI tools or integrated with this dashboard for advanced visualization</p>
+                        </li>
+                      </ol>
+                      
+                      <p className="text-xs mt-3 text-space-highlight">Recommended for enterprise-level analysis of NASA logs and other HTTP server logs exceeding multiple GB.</p>
+                    </div>
+                  )}
+                  
                   <p className="text-xs mt-2 text-space-accent">
                     See documentation for setup instructions using Docker Compose.
                   </p>

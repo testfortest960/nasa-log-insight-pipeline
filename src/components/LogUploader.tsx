@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Upload, FileText, AlertCircle } from "lucide-react";
+import { Upload, FileText, AlertCircle, Server } from "lucide-react";
 import { parseLogs } from "@/lib/logParser";
 import { toast } from "@/components/ui/use-toast";
 
@@ -14,6 +14,7 @@ const LogUploader: React.FC<LogUploaderProps> = ({ onLogsLoaded }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [fileName, setFileName] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showAdvancedInfo, setShowAdvancedInfo] = useState(false);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -163,20 +164,56 @@ const LogUploader: React.FC<LogUploaderProps> = ({ onLogsLoaded }) => {
           </div>
         )}
 
-        <div className="mt-4 flex items-center justify-center gap-2">
-          <Button
-            variant="outline"
-            className="border-space-accent/30 text-space-accent hover:bg-space-blue/30 hover:text-space-highlight"
-            onClick={handleUseSampleData}
-            disabled={isLoading}
-          >
-            Use Sample Data
-          </Button>
+        <div className="mt-4 flex flex-col space-y-3">
+          <div className="flex items-center justify-center gap-2">
+            <Button
+              variant="outline"
+              className="border-space-accent/30 text-space-accent hover:bg-space-blue/30 hover:text-space-highlight"
+              onClick={handleUseSampleData}
+              disabled={isLoading}
+            >
+              Use Sample Data
+            </Button>
 
-          <div className="text-xs text-muted-foreground flex items-center">
-            <AlertCircle className="h-3 w-3 mr-1" />
-            <span>NASA HTTP logs (Jul 1995 format)</span>
+            <div className="text-xs text-muted-foreground flex items-center">
+              <AlertCircle className="h-3 w-3 mr-1" />
+              <span>NASA HTTP logs (Jul 1995 format)</span>
+            </div>
           </div>
+          
+          <div className="flex items-center justify-center">
+            <Button
+              variant="link"
+              size="sm"
+              className="text-space-accent hover:text-space-highlight"
+              onClick={() => setShowAdvancedInfo(!showAdvancedInfo)}
+            >
+              {showAdvancedInfo ? "Hide advanced setup" : "Show advanced setup"}
+            </Button>
+          </div>
+          
+          {showAdvancedInfo && (
+            <div className="mt-2 bg-space-blue/20 rounded-lg p-4 text-sm">
+              <div className="flex items-start gap-2">
+                <Server className="h-5 w-5 text-space-accent mt-1 flex-shrink-0" />
+                <div>
+                  <p className="font-medium text-space-highlight mb-1">Advanced Analysis with Docker/Hadoop</p>
+                  <p className="text-muted-foreground text-xs mb-2">
+                    For large-scale log analysis, you can use our Docker-based Hadoop ecosystem:
+                  </p>
+                  <ul className="list-disc list-inside text-xs space-y-1 text-muted-foreground">
+                    <li>Docker containers for Hadoop, Flume, Hive, and MapReduce</li>
+                    <li>Distributed processing of multi-gigabyte log files</li>
+                    <li>Advanced analytics with Hive SQL queries</li>
+                    <li>Custom MapReduce jobs for complex aggregations</li>
+                  </ul>
+                  <p className="text-xs mt-2 text-space-accent">
+                    See documentation for setup instructions using Docker Compose.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
